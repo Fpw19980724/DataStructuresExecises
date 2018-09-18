@@ -1,0 +1,61 @@
+//对分查找
+//
+//
+//
+#include <stdio.h>
+int MaxSubSum(int A[],int Left,int Right);
+int Max(int a, int b, int c);
+int main()
+{
+    int A[]={4,-2,6,3,-2,-8,3,4,1,-9,4,5,6};
+    
+    printf("%d\n",MaxSubSum(A, 0, 12));
+    return 0 ;
+}
+
+int MaxSubSum(int A[],int Left,int Right){
+    int MaxLeftSum , MaxRightSum;
+    int MaxLeftBorderSum , MaxRightBorderSum;
+    int LeftBorderSum , RightBorderSum;
+    int Center , i ;
+    if(Left == Right)     //基准处理
+    {
+        if(A[Left]>0)
+        {
+            return A[Left];
+        }
+        else return 0 ;
+    }
+    Center=(Left+Right)/2;  //向下取整
+    MaxLeftSum=MaxSubSum(A, Left, Center);
+    MaxRightSum=MaxSubSum(A, Center+1, Right);
+    
+    MaxLeftBorderSum=0; LeftBorderSum=0;
+    for(i=Center;i>=Left;i--)      //对左边数组进行遍历
+    {
+        LeftBorderSum+=A[i];
+    if(LeftBorderSum>MaxLeftBorderSum)
+    {
+        MaxLeftBorderSum = LeftBorderSum;
+    }
+    }
+    MaxRightBorderSum=0 ; RightBorderSum=0;
+    for(i=Center+1;i<=Right;i++)    //对右边数组进行遍历
+    {
+        RightBorderSum+=A[i];
+        if(RightBorderSum>MaxRightBorderSum)
+        {
+            MaxRightBorderSum = RightBorderSum;
+        }
+    }
+    return Max(MaxLeftSum,MaxRightSum,MaxLeftBorderSum+MaxRightBorderSum);
+}
+
+int Max(int a, int b, int c)
+{
+    if(a>=b&&a>=c)
+        return a;
+    if(b>=a&&b>=c)
+        return b;
+    else return c;
+}
