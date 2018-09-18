@@ -1,0 +1,55 @@
+//桶排序（其实每个桶就是一个链表，key表示的是该桶中已有的数字个数）
+//
+//
+//
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct node {
+    int key;
+    struct node *next;
+}KeyNode;
+
+void bucket_sort(int keys[],int size,int bucket_size) {
+    int i,j;
+    KeyNode **bucket_table = (KeyNode **)malloc(bucket_size * sizeof(KeyNode*)); //为指向桶的指针数组分配内存
+    for(i = 0;i < bucket_size;i++) {
+        bucket_table[i] = (KeyNode*)malloc(sizeof(KeyNode));//为每个桶分配内存
+        bucket_table[i]->key = 0;                           //初始化每个桶
+        bucket_table[i]->next = NULL;
+    }
+    
+    for(j = 0;j < size;j++) {
+        KeyNode *node = (KeyNode *)malloc(sizeof(KeyNode));  //为每个节点分配内存（就是输入数组中的数字）
+        node->key = keys[j];
+        node->next = NULL;
+        int index = keys[j]/10;                              //设置桶的索引
+        KeyNode *p = bucket_table[index];                    //p是关于桶索引的一个链表单元（用p来控制整个桶链表）
+        if(p->key == 0) {                                    //如果是空桶，node接在next后面
+            bucket_table[index]->next = node;
+            (bucket_table[index]->key)++;                    //桶的中数字的数量+1
+        }
+        else {                                               //如果不是空桶就开始比较排序
+            while(p->next != NULL && p->next->key <= node->key) // 且前面的比后面的大
+                p = p->next;  // 把p往后挪一个单位
+            node->next = p->next;
+            p->next = node;
+            (bucket_table[index]->key)++;
+        }
+    }
+    
+    //print result
+    KeyNode * k = NULL;                                       //通过桶的索引非常容易来进行桶的排序进行输出
+    for(i = 0;i < bucket_size;i++)                            //再根据桶内已经比较排序好的数字进行输出
+        for(k = bucket_table[i]->next;k!=NULL;k=k->next)
+            printf("%d ",k->key);
+    printf("\n");
+}
+
+
+int main()
+{
+    int raw[] = {49,38,65,97,76,13,27,49};
+    int size = sizeof(raw)/sizeof(int);
+    bucket_sort(raw,size,10);
+}
