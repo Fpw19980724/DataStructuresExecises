@@ -13,12 +13,13 @@ int main()
     return 0 ;
 }
 
+//这是一个递归的MaxSubSum函数
 int MaxSubSum(int A[],int Left,int Right){
     int MaxLeftSum , MaxRightSum;
     int MaxLeftBorderSum , MaxRightBorderSum;
     int LeftBorderSum , RightBorderSum;
     int Center , i ;
-    if(Left == Right)     //基准处理
+    if(Left == Right)     //基准处理（BaseCase）
     {
         if(A[Left]>0)
         {
@@ -39,6 +40,7 @@ int MaxSubSum(int A[],int Left,int Right){
         MaxLeftBorderSum = LeftBorderSum;
     }
     }
+    
     MaxRightBorderSum=0 ; RightBorderSum=0;
     for(i=Center+1;i<=Right;i++)    //对右边数组进行遍历
     {
