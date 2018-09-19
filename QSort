@@ -55,7 +55,7 @@ int Partition(int A[], int p ,int r)    //数组的划分
             A[i] = temp;
         }
     }
-    c = A[r];
+    c = A[r];            //A[r]与A[i+1]的元素进行互换
     A[r] = A[i+1];
     A[i+1] = c;
     return (i+1);
