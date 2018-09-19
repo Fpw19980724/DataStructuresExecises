@@ -1,0 +1,82 @@
+//合并排序
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define INT_MAX 1000
+void MergeSort(int A[] , int p , int r);
+void Merge(int A[] , int p , int q , int r);
+
+
+int main() //给出测试用例
+{
+    int i , j;
+    int P[8]={49,38,65,97,76,13,27,102};
+    int N[9]={49,38,65,97,76,13,27,102,24};
+    printf("原偶数数组：\n");
+    for(i=0;i<8;i++)
+    {
+        printf("%d\t",P[i]);
+    }
+    printf("\n");
+    
+    MergeSort(P, 0, 7);
+    printf("偶数合并排序后：\n");
+    for(j=0;j<8;j++)
+    {
+        printf("%d\t",P[j]);
+    }
+    printf("\n");
+    return 0 ;
+    
+}
+
+void MergeSort(int A[] , int p , int r)
+{
+    int q ;   //q为中间的数
+    if(p<r)
+    {
+        q = (p+r)/2;  //把原数组对半分
+        MergeSort(A, p, q);
+        MergeSort(A, q+1, r);
+        Merge(A, p , q , r);
+    }
+    
+}
+
+void Merge(int A[] , int p , int q , int r)
+{
+    int n , m ;//n,m是两个分开数组的长度
+    int i , j ;
+    int a , b ;
+    
+    n = q-p+1;
+    m = r-q ;
+
+    int B[]={};
+    int C[]={};
+    
+    for(j=0;j<n;j++)
+    {
+        B[j] = A[j];
+    }
+    for(i=m;i<=r;r++)
+    {
+        C[i-m] = A[m+1];
+    }
+    B[n]=INT_MAX;
+    C[m]=INT_MAX;
+    a = 0; b = 0;
+    for(int k=p ; k<=r ; k++)
+    {
+        if(B[a]<=C[b])
+        {
+            A[k] = B[a];
+            a++;
+        }
+        else
+        {
+            A[k] = C[b];
+            b++;
+        }
+    }
+}
