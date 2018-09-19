@@ -1,0 +1,58 @@
+#include<stdio.h>
+#include <stdlib.h>
+#define title "------------------------------Life is a fight!------------------------------------"
+
+typedef char Eletype;
+typedef struct BitNode{
+    struct BitNode *lt;//指向左节点
+    Eletype data;//根节点的数据
+    struct BitNode *rt;//指向右节点
+} BitNode, *BitPtr;
+
+/*按前序遍历方式生成二叉树
+ * 无子节点则用空格代替
+ */
+void CrtBit(BitPtr *pptr)//这里由于需要对指针的地址进行操作(用malloc),所以需要用指针的指针作为形参
+{
+    char c;
+    scanf("%c",&c);
+    if(' '==c)
+    {
+        *pptr=NULL;         //指针的指针的地址为null
+    }
+    else
+    {
+        *pptr=(BitPtr)malloc(sizeof(BitNode));
+        (*pptr)->data=c;
+        CrtBit(&(*pptr)->lt);//注意参数是指针的指针          对（*pptr）取址 &（*pptr）表示的就是指向结构体的指针的地址！！！
+        CrtBit(&(*pptr)->rt);
+    }
+}
+
+/*打印一个节点的数据*/
+void VisitBit(Eletype c, int level)
+{
+    printf("%d: %c\n",level, c);
+}
+
+/*遍历节点*/
+void TslBit(BitPtr ptr, int level)
+{
+    if(ptr)
+    {
+        VisitBit(ptr->data, level);
+        TslBit(ptr->lt, level+1);
+        TslBit(ptr->rt, level+1);
+    }
+}
+
+int main(void)
+{
+    BitPtr ptr;
+    int level=1;
+    printf("%s\n\n",title);
+    printf("Please enter the data:\n");
+    CrtBit(&ptr);
+    TslBit(ptr, level);
+    return 0;
+}
