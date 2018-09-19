@@ -1,0 +1,64 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+
+typedef struct BiNode
+{
+    char content;
+    struct BiNode *left;
+    struct BiNode *right;
+}BiNode,*BiTree;
+
+void CreateBiTree(BiTree *T)
+{
+    char receive;
+    scanf("%c",&receive);
+    if(receive == '*')
+    {
+        T=NULL;
+    }
+    else
+    {
+        *T=(BiTree)malloc(sizeof(BiNode));
+        (*T)->content =receive;
+        CreateBiTree(&(*T)->left);
+        CreateBiTree(&(*T)->right);
+    }
+}
+#define FRONT 1
+#define MIDDLE 2
+#define BACK 3
+
+// .....
+
+void show(BiTree *T,int TYPE)
+{
+    if(*T==NULL)
+    {
+        printf("*");
+        return ;
+    }
+    else
+    {
+        switch(TYPE)
+        {
+                ///////just change the order
+            case FRONT:
+                printf("%c",(*T)->content);
+                show(&(*T)->left,TYPE);
+                show(&(*T)->right,TYPE);
+                break;
+            case MIDDLE:
+                show(&(*T)->left,TYPE);
+                printf("%c",(*T)->content);
+                show(&(*T)->right,TYPE);
+                break;
+            case BACK:
+                show(&(*T)->left,TYPE);
+                show(&(*T)->right,TYPE);
+                printf("%c",(*T)->content);
+                break;
+        }
+        return ;
+    }
+}
