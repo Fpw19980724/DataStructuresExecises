@@ -40,7 +40,7 @@ void show(BiTree *T,int TYPE)
     }
     else
     {
-        switch(TYPE)
+        switch(TYPE)                              //树的三种遍历方法：先序，中序，后序
         {
                 ///////just change the order
             case FRONT:
