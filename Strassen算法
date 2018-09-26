@@ -1,0 +1,331 @@
+//Strassen's 矩阵乘法问题
+#include <stdio.h>
+#include <stdlib.h>
+int Strassen(int n, int** MatrixA, int** MatrixB ,int** MatrixC);
+int ADD(int** MatrixA ,int** MatrixB, int** MatrixResult ,int MatrixSize);
+int SUB(int** MatrixA ,int** MatrixB, int** MatrixResult ,int MatrixSize);
+int MUL(int** MatrixA ,int** MatrixB, int** MatrixResult ,int MatrixSize);
+void FillMatrix(int** Matrix1 ,int**Matrix2 ,int length);
+void PrintMatrix(int** MatrixA ,int MatrixSize);
+
+
+int main()
+{
+    int MatrixSize = 0;
+    int i ; //循环变量
+    int** MatrixA;
+    int** MatrixB;
+    int** MatrixC;
+    int N = MatrixSize = 16;
+    
+    //申请全部行的首指针
+    MatrixA = (int **)malloc(sizeof(int *)*N);
+    MatrixB = (int **)malloc(sizeof(int *)*N);
+    MatrixC = (int **)malloc(sizeof(int *)*N);
+    
+    //申请列的指针
+    for(i=0;i<MatrixSize;i++)
+    {
+        *(MatrixA+i) = (int *)malloc(sizeof(int)*N);
+        *(MatrixB+i) = (int *)malloc(sizeof(int)*N);
+        *(MatrixC+i) = (int *)malloc(sizeof(int)*N);
+    }
+    FillMatrix(MatrixA, MatrixB, MatrixSize);
+    Strassen(N, MatrixA, MatrixB, MatrixC);
+    printf("MatrixOne:");
+    PrintMatrix(MatrixA, MatrixSize);
+    printf("MatrixTwo:");
+    PrintMatrix(MatrixB, MatrixSize);
+    printf("MatrixFinal:");
+    PrintMatrix(MatrixC, MatrixSize);
+    return 0;
+}
+
+
+
+
+int Strassen(int N, int** MatrixA, int** MatrixB ,int** MatrixC)
+{
+    int i; //循环变量
+    int HalfSize = N/2;
+    int newSize = N/2;
+    int** A11 = NULL;
+    int** A12;
+    int** A21;
+    int** A22;
+    int** B11;
+    int** B12;
+    int** B21;
+    int** B22;
+    int** C11;
+    int** C12;
+    int** C21;
+    int** C22;
+    int** M1;
+    int** M2;
+    int** M3;
+    int** M4;
+    int** M5;
+    int** M6;
+    int** M7;
+    int** AResult;
+    int** BResult;
+    
+    if(N<=4)
+    {
+        MUL(MatrixA, MatrixB, MatrixC, N);
+    }
+    else
+    {
+    //申请全部行的首指针
+    A11 = (int **)malloc(sizeof(int *)*newSize);
+    A12 = (int **)malloc(sizeof(int *)*newSize);
+    A21 = (int **)malloc(sizeof(int *)*newSize);
+    A22 = (int **)malloc(sizeof(int *)*newSize);
+    B11 = (int **)malloc(sizeof(int *)*newSize);
+    B12 = (int **)malloc(sizeof(int *)*newSize);
+    B21=  (int **)malloc(sizeof(int *)*newSize);
+    B22 = (int **)malloc(sizeof(int *)*newSize);
+    C11 = (int **)malloc(sizeof(int *)*newSize);
+    C12 = (int **)malloc(sizeof(int *)*newSize);
+    C21 = (int **)malloc(sizeof(int *)*newSize);
+    C22 = (int **)malloc(sizeof(int *)*newSize);
+    M1 = (int **)malloc(sizeof(int *)*newSize);
+    M2 = (int **)malloc(sizeof(int *)*newSize);
+    M3 = (int **)malloc(sizeof(int *)*newSize);
+    M4 = (int **)malloc(sizeof(int *)*newSize);
+    M5 = (int **)malloc(sizeof(int *)*newSize);
+    M6 = (int **)malloc(sizeof(int *)*newSize);
+    M7 = (int **)malloc(sizeof(int *)*newSize);
+    AResult = (int **)malloc(sizeof(int *)*newSize);
+    BResult = (int **)malloc(sizeof(int *)*newSize);
+    
+    //申请列的指针
+    for(i=0;i<newSize;i++)
+    {
+        A11[i] = (int *)malloc(sizeof(int)*newSize);
+        A12[i] = (int *)malloc(sizeof(int)*newSize);
+        A21[i] = (int *)malloc(sizeof(int)*newSize);
+        A22[i] = (int *)malloc(sizeof(int)*newSize);
+        B11[i] = (int *)malloc(sizeof(int)*newSize);
+        B12[i] = (int *)malloc(sizeof(int)*newSize);
+        B21[i] = (int *)malloc(sizeof(int)*newSize);
+        B22[i] = (int *)malloc(sizeof(int)*newSize);
+        C11[i] = (int *)malloc(sizeof(int)*newSize);
+        C12[i] = (int *)malloc(sizeof(int)*newSize);
+        C21[i] = (int *)malloc(sizeof(int)*newSize);
+        C22[i] = (int *)malloc(sizeof(int)*newSize);
+        M1[i] = (int *)malloc(sizeof(int)*newSize);
+        M2[i] = (int *)malloc(sizeof(int)*newSize);
+        M3[i] = (int *)malloc(sizeof(int)*newSize);
+        M4[i] = (int *)malloc(sizeof(int)*newSize);
+        M5[i] = (int *)malloc(sizeof(int)*newSize);
+        M6[i] = (int *)malloc(sizeof(int)*newSize);
+        M7[i] = (int *)malloc(sizeof(int)*newSize);
+        AResult[i] = (int *)malloc(sizeof(int)*newSize);
+        BResult[i] = (int *)malloc(sizeof(int)*newSize);
+    }
+    
+    for(int j =0;j<N/2;j++)
+    {
+        for(int k =0;k<N/2;k++)
+        {
+            A11[j][k] = MatrixA[j][k];
+            A12[j][k] = MatrixA[j][k+N/2];
+            A21[j][k] = MatrixA[j+N/2][k];
+            A22[j][k] = MatrixA[j+N/2][k+N/2];
+            
+            B11[j][k] = MatrixB[j][k];
+            B12[j][k] = MatrixB[j][k+N/2];
+            B21[j][k] = MatrixB[j+N/2][k];
+            B22[j][k] = MatrixB[j+N/2][k+N/2];
+        }
+    }
+    
+    //现在我们来算M1~M7
+    //M1[][] A(F-H)
+    SUB(B12, B22, BResult, HalfSize);
+    Strassen(HalfSize, A11, BResult, M1);
+    
+    //M2[][] (A+B)H
+    ADD(A11, A12, AResult, HalfSize);
+    Strassen(HalfSize, AResult, B22, M2);
+    
+    //M3[][] (C+D)E
+    ADD(A21, A22, AResult, HalfSize);
+    Strassen(HalfSize, AResult, B11, M3);
+    
+    //M4[][] D(G-E)
+    SUB(B21, B11, BResult, HalfSize);
+    Strassen(HalfSize, A22, BResult, M4);
+    
+    //M5[][] (A+D)(E+H)
+    ADD(A11, A22, AResult, HalfSize);
+    ADD(B11, B22, BResult, HalfSize);
+    Strassen(HalfSize, AResult, BResult, M5);
+    
+    //M6[][] (B-D)(G+H)
+    SUB(A12, A22, AResult, HalfSize);
+    ADD(B21, B22, BResult, HalfSize);
+    Strassen(HalfSize, AResult, BResult, M6);
+    
+    //M7[][] (A-C)(E+F)
+    SUB(A11, A21, AResult, HalfSize);
+    ADD(B11, B12, BResult, HalfSize);
+    Strassen(HalfSize, AResult, BResult, M7);
+    
+    //现在开始算IJKL C11~C22
+    
+    //C11 I M5+M6+M4-M2
+    ADD(M5, M6, AResult, HalfSize);
+    SUB(M4, M2, BResult, HalfSize);
+    ADD(AResult, BResult, C11, HalfSize);
+    
+    //C12 J M1+M2
+    ADD(M1, M2, C12, HalfSize);
+    
+    //C21 K M3+M4
+    ADD(M3, M4, C21, HalfSize);
+    
+    //C22 L M1-M7-M3+M5
+    ADD(M1, M5, AResult, HalfSize);
+    ADD(M7, M3, BResult, HalfSize);
+    SUB(AResult, BResult, C22, HalfSize);
+    
+        for(int i=0;i<N/2;i++)
+        {
+            for(int j=0;j<N/2;j++)
+            {
+                MatrixC[i][j]= C11[i][j];
+                MatrixC[i][j+N/2] = C12[i][j];
+                MatrixC[i+N/2][j] = C21[i][j];
+                MatrixC[i+N/2][j+N/2] = C22[i][j];
+                
+            }
+        }
+    //释放数组的空间 (先释放列再释放行)
+    for(i=0;i<newSize;i++)
+    {
+        free(A11[i]);
+        free(A12[i]);
+        free(A21[i]);
+        free(A22[i]);
+        free(B11[i]);
+        free(B12[i]);
+        free(B21[i]);
+        free(B22[i]);
+        free(C11[i]);
+        free(C12[i]);
+        free(C21[i]);
+        free(C22[i]);
+        free(M1[i]);
+        free(M2[i]);
+        free(M3[i]);
+        free(M4[i]);
+        free(M5[i]);
+        free(M6[i]);
+        free(M7[i]);
+        free(AResult[i]);
+        free(BResult[i]);
+    }
+    free(A11);
+    free(A12);
+    free(A21);
+    free(A22);
+    free(B11);
+    free(B12);
+    free(B21);
+    free(B22);
+    free(C11);
+    free(C12);
+    free(C21);
+    free(C22);
+    free(M1);
+    free(M2);
+    free(M3);
+    free(M4);
+    free(M5);
+    free(M6);
+    free(M7);
+    free(AResult);
+    free(BResult);
+        
+    } //end of else
+    return 0;
+}
+
+//矩阵加法
+int ADD(int** MatrixA ,int** MatrixB, int** MatrixResult ,int MatrixSize)
+{
+    int i , j;
+    for(i=0;i<MatrixSize;i++)
+    {
+        for(j=0;j<MatrixSize;j++)
+        {
+            MatrixResult[i][j] = MatrixA[i][j]+MatrixB[i][j];
+        }
+    }
+    return 0;
+}
+
+//矩阵减法
+int SUB(int** MatrixA ,int** MatrixB, int** MatrixResult ,int MatrixSize)
+{
+    int i , j;
+    for(i=0;i<MatrixSize;i++)
+    {
+        for(j=0;j<MatrixSize;j++)
+        {
+            MatrixResult[i][j] = MatrixA[i][j]-MatrixB[i][j];
+        }
+    }
+    return 0;
+}
+
+//矩阵乘法
+int MUL(int** MatrixA ,int** MatrixB, int** MatrixResult ,int MatrixSize)
+{
+    int i , j , k ;
+    for(i=0;i<MatrixSize;i++)
+    {
+        for(j=0;j<MatrixSize;j++)
+        {
+            MatrixResult[i][j]=0;
+            for(k=0;k<MatrixSize;k++)
+            {
+                MatrixResult[i][j] = MatrixResult[i][j]+MatrixA[i][k]*MatrixB[k][j];
+            }
+        }
+    }
+    return 0 ;
+}
+
+//填充矩阵
+void FillMatrix(int** Matrix1 ,int**Matrix2 ,int length)
+{
+    int row , column;
+    for(row=0;row<length;row++)
+    {
+        for(column=0;column<length;column++)
+        {
+            Matrix1[row][column] = (Matrix2[row][column] = 1);
+        }
+    }
+}
+
+//打印矩阵
+void PrintMatrix(int** MatrixA ,int MatrixSize)
+{
+    int row , column;
+    printf("\n");
+    for(row=0;row<MatrixSize;row++)
+    {
+        for(column=0;column<MatrixSize;column++)
+        {
+            printf("%d ",MatrixA[row][column]);
+            if((column+1)%MatrixSize==0)
+                printf("\n");
+        }
+    }
+    printf("\n");
+}
