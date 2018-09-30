@@ -1,0 +1,25 @@
+//初始化一个链表结点
+pNode init_node(Node *pnode, int data);
+//pNode init_node(Node *pnode , int i , int s ,int f);
+//创建链表函数
+pNode create_list();
+//遍历链表
+void traverse_list(pNode pHead);
+//头插法建立链表，每次在表头插入
+pNode createlink_byhead(Node *phead, Node node, int data);
+//尾插法建立链表
+pNode createlink_bytail(Node *phead, Node node, int data);
+//求链表长度
+int linklen(Node *phead);
+//按值查找操作
+pNode searchnode(Node *phead, int key);
+//前插法
+pNode insertnode_bypre(Node *phead, Node node, int data, int key);
+//后插法
+pNode insertnode_byback(Node *phead, Node node, int data, int key);
+//删除结点
+pNode deletenode(Node *phead, int key);
+//链表倒置
+pNode reverselink(Node *phead);
+//链表排序（冒泡排序）
+pNode linksort(Node *phead);
