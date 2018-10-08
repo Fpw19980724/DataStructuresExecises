@@ -1,0 +1,59 @@
+pNode CreateList()                      //创建任务链表
+{
+    int i , s , f , len;
+    pNode p_head = (pNode)malloc(sizeof(Node));
+    pNode p_tail = p_head;
+    p_tail->next = NULL;
+    printf("请输入节点数：");
+    scanf("%d",&len);
+    for(i=0;i<len;i++)
+    {
+        printf("请输入第%d个节点的值:",i+1);
+        scanf("%d,%d",&s,&f);
+        pNode p_new = (pNode)malloc(sizeof(Node));
+        p_new->i = i+1;
+        p_new->s = s;
+        p_new->f = f;
+        p_tail->next = p_new;
+        p_new->next =NULL;
+        p_tail = p_new;
+    }
+    return p_head;
+}
+
+pNode Delete(pNode phead , int key)
+{
+    pNode ptmp = phead;
+    pNode tmp = NULL;
+    if(phead==NULL)
+    {
+        printf("This Linked List Is Empty, Delete Fail!");
+        return NULL;
+    }
+    else if(phead->s ==key)
+    {
+        phead = phead->next;
+        free(ptmp);
+        ptmp = NULL;
+    }
+    else
+    {
+        while(ptmp!=NULL && ptmp->next->s!=key )
+        {
+            ptmp = ptmp->next;
+        }
+        if(ptmp->next==NULL)
+        {
+            printf("Delete Key Is Not Found!");
+            return phead;
+        }
+        if(ptmp->next->s==key)
+        {
+            tmp = ptmp->next;
+            ptmp->next = tmp->next;
+            free(tmp);
+            tmp = NULL;
+        }
+    }
+    return phead;
+}
