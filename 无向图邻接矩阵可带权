@@ -1,0 +1,91 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define MAXVERTICES 100
+#define MAXWEIGHT 32767
+typedef struct
+{
+    int Vertices[MAXVERTICES];
+    int Edge[MAXVERTICES][MAXVERTICES];
+    int numV; //当前顶点数
+    int numE; //当前的边数
+}AdjMatrix;
+
+void CreateGraph(AdjMatrix *g)
+{
+    int n , e , vi , vj , w , i , j;
+    printf("输入图的顶点数和边数（以空格隔开）:");
+    scanf("%d %d",&n,&e);
+    g->numV = n ;
+    g->numE = e ;
+    
+    //进行邻接矩阵的初始化
+    for(i=0;i<n;i++)
+    {
+        for(j=0;j<n;j++)
+        {
+            if(i==j)
+            {
+                g->Edge[i][j] = 0;
+            }
+            else
+                g->Edge[i][j] = MAXWEIGHT;
+        }
+    }
+    //把顶点的信息记录数组里面
+    for(i=0;i<g->numV;i++)
+    {
+        printf("请输入第%d个顶点的信息(整型):",i+1);
+        scanf("%d",&g->Vertices[i]);
+    }
+    printf("\n");
+    
+    //把边的信息记录到数组里面
+    for(i=0;i<g->numE;i++)
+    {
+        printf("请输入边的信息i,j,w(以空格分隔):");
+        scanf("%d%d%d",&vi,&vj,&w);
+        //若为不带权值的图，则w输入1
+        //若为带权值的图，则w输入对应权值
+        
+        g->Edge[vi-1][vj-1] = w;
+        g->Edge[vj-1][vi-1] = w;
+    }
+}
+
+void DispGraph(AdjMatrix g)
+{
+    int i , j ;
+    printf("\n输出顶点的信息（整型）:\n");
+    for(i=0;i<g.numV;i++)
+        printf("%d",g.Vertices[i]);
+    
+    printf("\n输出邻接矩阵:\n");
+    printf("\t");
+    for(i=0;i<g.numV;i++)
+        printf("%d",g.Vertices[i]);
+    
+    for(i=0;i<g.numV;i++)
+    {
+        printf("\n%d",i+1);
+        for(j=0;j<g.numV;j++)
+        {
+            if(g.Edge[i][j]==32767)
+                //两点之间无连接时权值为默认的32767，
+                //在无向图中一般用"0"表示，在有向图中一般用"∞",
+                //这里为了方便统一输出 "∞"
+                printf("%s\t", "∞");
+            else
+                printf("%d\t",g.Edge[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+int main()
+{
+    AdjMatrix g;
+    CreateGraph(&g);
+    DispGraph(g);
+    return 0 ;
+    
+}
