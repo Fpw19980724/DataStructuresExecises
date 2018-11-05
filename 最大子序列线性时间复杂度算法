@@ -1,0 +1,57 @@
+#include<stdio.h>
+int Max(int a, int b, int c);
+int FindChileArray_coenter(int arr[],int low,int high);
+
+int main()
+{
+    int arry[16]={13,-3,-25,20,-3,-16,-23,18,20,-7,12,-5,-22,15,-4,7};
+    printf("%d\n",FindChileArray_coenter(arry, 0, 15));
+    return 0;
+}
+
+int Max(int a, int b, int c)
+{
+    if(a>b&&a>c)
+    {
+        return a;
+    }
+    else if (b>a&&b>c)
+    {
+        return b;
+    }
+    else
+    {
+        return c;
+    }
+}
+
+int FindChileArray_coenter(int arr[],int low,int high)
+{
+    int mid = (low+high)/2;
+    int left_sum=-100;
+    int right_sum=-100;
+    int sum=0;
+    int i;
+    
+    for(i=mid;i>low;i--)
+    {
+        sum+=arr[i];
+        
+        if(sum>left_sum)
+        {
+            left_sum=sum;
+        }
+    }
+    
+    sum=0;
+    for(i=mid+1;i<high;i++)
+    {
+        sum+=arr[i];
+        
+        if(sum>right_sum)
+        {
+            right_sum=sum;
+        }
+    }
+    return Max(left_sum, right_sum, left_sum + right_sum);
+}
