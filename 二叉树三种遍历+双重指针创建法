@@ -1,0 +1,75 @@
+#include <stdio.h>
+#include <stdlib.h>
+int c_Node = 0;
+int c_Leaf = 0;
+int depth = 0;
+typedef char ElemType;
+
+typedef struct TreeNode{
+    ElemType data;
+    struct TreeNode *lchild;
+    struct TreeNode *rchild;
+}BiNode, *BiTree;
+
+//先序建立二叉树
+void createTree(BiNode **root){
+    ElemType data;
+    scanf("%c",&data);
+    if(data == '#'){
+        *root = NULL;
+    }
+    else{
+        *root = (BiNode*)malloc(sizeof(BiNode));
+        if(*root == NULL){
+            printf("分配空间失败!\n");
+            exit(0);
+        }
+        (*root)->data = data;
+        createTree(&((*root)->lchild));
+        createTree(&((*root)->rchild));
+    }
+}
+
+//遍历必须得要知道root的地址！ 所以每个遍历的函数的形参里都需要带有root的地址，也就是指针变量。
+//先序遍历二叉树
+void preOrder(BiNode *root){
+    if(root)
+    {
+        printf("%c",root->data);
+        preOrder(root->lchild);
+        preOrder(root->rchild);
+    }
+}
+
+//中序遍历二叉树
+void inOrder(BiNode *root){
+    if(root){
+        inOrder(root->lchild);
+        printf("%c",root->data);
+        inOrder(root->rchild);
+    }
+}
+
+//后序遍历二叉树
+void postOrder(BiNode *root){
+    if(root){
+        postOrder(root->lchild);
+        postOrder(root->rchild);
+        printf("%c",root->data);
+    }
+}
+
+int main(){
+    printf("先序输入二叉树数据(# = NULL):");
+    BiNode *root;
+    createTree(&root);
+    printf("先序遍历结果：");
+    preOrder(root);
+    printf("\n");
+    printf("中序遍历结果：");
+    inOrder(root);
+    printf("\n");
+    printf("后序遍历结果：");
+    postOrder(root);
+    printf("\n");
+}
