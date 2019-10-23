@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
  
-/* 定义堆栈的最大元素个数 */
+/* 定义堆栈每个格子的最大元素个数 */
 #define MAX_ITEMS		20
  
 /* 定义一个boolean型枚举类型 */
